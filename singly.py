@@ -4,12 +4,52 @@ class Node:
         self.data = data
         self.next = None
 
+def search_list(head, key):
+    if head is None:
+        return False
+    if head.data == key:
+        return True
+    return search_list(head.next, key)
+
+def delete_front(head):
+    if head is None:
+        return None
+    temp = head
+    head = head.next
+    temp = None
+    return head
+
+def delete_end(head):
+    if head is None:
+        return None
+
+    if head.next is None:
+        return None
+
+    secondLast = head
+    while secondLast.next.next is not None:
+        secondLast = secondLast.next
+
+    secondLast.next = None
+    return head
+
+def delete_pos(head, pos):
+    temp = head
+    if pos == 1:
+        head = temp.next
+        return head
+    prev = None
+    for i in range(1, pos):
+        prev = temp
+        temp = temp.next
+
+    prev.next = temp.next
+    return head
 
 def insert_front(head, x):
     new_node = Node(x)
     new_node.next = head
     return new_node
-
 
 def insert_end(head, x):
     new_node = Node(x)
@@ -27,7 +67,6 @@ def insert_end(head, x):
 
 
 def insert_pos(head, pos, val):
-
     if pos < 1:
         return head
 
@@ -83,34 +122,77 @@ while temp is not None:
     count += 1
     temp = temp.next
 
-try:
-    new = int(input("Enter value to add: "))
-
-    insert_menu = [
+insert_menu = [
         "1. Insert at the beginning",
         "2. Insert at the end",
         "3. Insert at specific position",
     ]
 
-    for i in insert_menu:
-        print(i)
+delete_menu = [
+    "1. Delete head",
+    "2. Delete tail",
+    "3. Delete specific position"
+]
 
-    choice = int(input("Choose: "))
+singly_menu = [
+        "1. Insertion",
+        "2. Deletion",
+        "3. Searching",
+        "4. Update",
+        "5. Exit"
+    ]
 
-    match (choice):
-        case 1:
-            node1 = insert_front(node1, new)
-            print_list(node1)
-        case 2:
-            node1 = insert_end(node1, new)
-            print_list(node1)
-        case 3:
-            pos = int(input("Position: "))
-            if pos == count:
-                node1 = insert_end(node1, new)
-                print_list(node1)
-            else:
-                node1 = insert_pos(node1, pos, new)
-                print_list(node1)
-except TypeError as e:
-    print(f"{e}")
+for options_i in singly_menu:
+    print(options_i)
+
+try:
+    while True:
+        menu_choice = int(input("Choose: "))
+        match(menu_choice):
+            case 1:
+                new = int(input("Enter value to add: "))
+                for i in insert_menu:
+                    print(i)
+                choice = int(input("Choose: "))
+                match (choice):
+                    case 1:
+                        node1 = insert_front(node1, new)
+                        print_list(node1)
+                    case 2:
+                        node1 = insert_end(node1, new)
+                        print_list(node1)
+                    case 3:
+                        pos = int(input("Position: "))
+                        if pos == count:
+                            node1 = insert_end(node1, new)
+                            print_list(node1)
+                        else:
+                            node1 = insert_pos(node1, pos, new)
+                            print_list(node1)
+            case 2:
+                for i in delete_menu:
+                    print(i)
+                choice = int(input("Choose:"))
+                match(choice):
+                    case 1:
+                        node1 = delete_front(node1)
+                        print_list(node1)
+                    case 2:
+                        node1 = delete_end(node1)
+                        print_list(node1)
+                    case 3:
+                        pos = int(input("Position: "))
+                        node1 = delete_pos(node1, pos)
+                        print_list(node1)
+            case 3:
+                key = int(input("Value to find: "))
+                if search_list(head, key):
+                    print(f"Value {key} is in the linked list.")
+                else:
+                    print(f"Value {key} is not in the linked list.")
+            case 4:
+                pass
+            case 5:
+                break
+except ValueError as e:
+    print(f"Error: {e}")
